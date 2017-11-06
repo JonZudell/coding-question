@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <h3 style="text-align:center;">
+            Hello, Thanks for taking a look!
+          </h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <p>The document didn't specify that I needed to render the image but I chose to anyways. You can adjust the number of columns/rows if you want to! Also the triangles are techincally 10px though it's rendered on an SVG with the viewbox property set so it takes up the entire div.</p>
+        </div>
+      </div>
+      <form action="/" method="get" class="form-horizontal">
+        <div class="row">
+          <div class="col-md-1 col-md-offset-3">
+            <div class="form-group">
+              <label for="columns" class="control-label">
+                Columns
+              </label>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <input name="columns" type="text" class="form-control" id="columns" value="{{columns}}"></input>
+          </div>
+          <div class="col-md-1">
+            <div class="form-group">
+              <label for="rows" class="control-label">
+                Rows
+              </label>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <input name="rows" type="text" class="form-control" id="rows" value="{{rows}}"></input>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <button style="width:100%" type="submit" class="btn btn-default">Update!</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <svg width="auto" viewbox="0 0 {{ view_port['x_extent']}} {{view_port['y_extent']}}">
+            {% for triangle in triangles %}
+            {% if triangle['id'] in matches.keys() %}
+            <polygon id="{{triangle['id']}}" points="{{triangle['render_string']}}" style="fill:blue;stroke:gray;stroke-width:1px;" />
+            {% else %}
+            <polygon id="{{triangle['id']}}" points="{{triangle['render_string']}}" style="fill:black;stroke:white;stroke-width:1px;" />
+            {% endif %}
+            <text text-anchor="middle" fill="white" font-size="2" x="{{triangle['centroid'][0]}}" y="{{triangle['centroid'][1]}}">{{triangle['id']}}</text>
+            {% endfor %}
+            <polygon id="match" points="{{polygon}}" style="fill:red;fill-opacity:0.4;"/>
+          </svg>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <p>The last page of the requirements could be interpreted a couple of ways. One way is to interpet that labels should be generated from a set of vertices instead of based upon x, y position as I have. The other would be that given a set of vertices pick out the triangle that's associated. The latter option has multiple interpretations I'll implement a couple. One interpretation is what I will call strict I will only match a triangle if it's given vertices are an exact match. another strategy might be to say that if the provided triangle intersects with a rendered triangle that I can match on that given that a triangle is just a special case of a polygon I'll implement it so any polygon provided will show intersection.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <select name="mode" type="select" class="form-control" id="mode">
+              <option>Strict</option>
+              <option>Intersect</option>
+            </select>
+            <input placeholder="Poygon must be convex format v1x,v1y,v2x,v2y..." name="vertices" type="text" class="form-control" id="vertices" value="{{polygon if polygon else ''}}"></input>
+            <button style="width:100%" type="submit" class="btn btn-default">Show Matches!</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
