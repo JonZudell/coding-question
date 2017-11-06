@@ -172,7 +172,9 @@ def index():
     polygon = None if polygon == '' else polygon
     view_port = get_view_port(rows, columns)
     triangles = generate_triangles(rows, columns)
-    matches = get_matches(mode, polygon, rows, columns)
+    matches = {}
+    if mode and polygon:
+        matches = get_matches(mode, polygon, rows, columns)
 
     return render_template('index.html', triangles=triangles, view_port=view_port, rows=rows, columns=columns, polygon=polygon, mode=mode, matches=matches)
 
