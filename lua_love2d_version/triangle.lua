@@ -1,7 +1,23 @@
 Triangle = {}
+
+Shader = love.graphics.newShader[[
+extern int current_time;
+extern int time_clicked;
+vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords) {
+  float diff = clamp((current_time - time_clicked) * 200,0,1000);
+  float inverse = (1000 - diff) / 1000.0;
+  diff = diff / 1000.0;
+  vec4 pixel = vec4(0.5,0.5,0,1);
+  pixel.r += inverse;
+  pixel.g = .5;
+  pixel.b += diff;
+  return pixel;
+}
+]]
+
 function Triangle:new(o)
   --object creation
-  o = o 
+  o = o
   setmetatable(o, self)
   self.__index = self
   --openGL expects vertices to appear as follows
@@ -19,16 +35,21 @@ function Triangle:new(o)
   end
   o.x_centroid = (o.vertices[1] + o.vertices[3] + o.vertices[5]) / 3
   o.y_centroid = (o.vertices[2] + o.vertices[4] + o.vertices[6]) / 3
-  o.text = love.graphics.newText(love.graphics.getFont(),string.char(64 + o.y).. o.x)
+  o.name = string.char(64 + o.y) .. o.x
+  o.text = love.graphics.newText(love.graphics.getFont(),o.name)
+  o.time_clicked = 0
   return o
 end
 
 function Triangle:draw()
-  love.graphics.setColor(128,128,255)
+  love.graphics.setShader(Shader)
+  Shader:send('time_clicked', self.time_clicked)
+  Shader:send('current_time', os.time())
   love.graphics.polygon('fill', self.vertices)
+  love.graphics.setShader()
   love.graphics.setColor(0,0,0)
   love.graphics.polygon('line', self.vertices)
-  love.graphics.setColor(255,255,255)
+  love.graphics.setColor(0,255,255)
   love.graphics.draw(self.text,
                      self.x_centroid - (self.text:getWidth() / (10)),
                      self.y_centroid - (self.text:getHeight() / (10)),
