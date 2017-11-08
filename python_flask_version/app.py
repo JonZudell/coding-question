@@ -2,7 +2,7 @@
 import json
 import math
 
-from shapely.geometry import Polygon, Point
+from shapely.geometry import Polygon
 from flask import Flask, render_template, abort, request
 from functools import lru_cache
 from collections import defaultdict
@@ -105,9 +105,6 @@ def determine_comparison(vertices, comparator, rows=6, columns=12):
         result = []
     return result
 
-def determine_strict(vertices):
-    return []
-
 def generate_verts_for_comparison(vertices):
     vertices = [ int(x) for x in vertices.split(',')]
     if len(vertices) % 2 != 0:
@@ -150,7 +147,6 @@ def get_matches(mode, polygon, rows, columns):
     matches = defaultdict(None)
     verts = generate_verts_for_comparison(polygon)
     comp = lambda x, y: False
-    comp = lambda x,y : x.centroid().within(y)
     if mode == 'Strict':
         comp = lambda x,y: x.equals(y)
     elif mode == 'Intersect':
@@ -176,7 +172,9 @@ def index():
     if mode and polygon:
         matches = get_matches(mode, polygon, rows, columns)
 
-    return render_template('index.html', triangles=triangles, view_port=view_port, rows=rows, columns=columns, polygon=polygon, mode=mode, matches=matches)
+    return render_template('index.html', triangles=triangles, view_port=view_port,
+                           rows=rows, columns=columns, polygon=polygon,
+                           mode=mode, matches=matches)
 
 if __name__ == '__main__':
     app.run(debug=False)

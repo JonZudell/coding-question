@@ -54,8 +54,8 @@ end
 
 function love.draw()
   --Before drawing make sure objects are appropriately centered
-  love.graphics.print("Last click at X" .. mouse_x .. "Y " .. mouse_y, 10, 10)
-  love.graphics.print("Last clicked cell" .. last_clicked_cell, 10, 30)
+  love.graphics.print("Last click at X " .. mouse_x .. " Y " .. mouse_y, 10, 10)
+  love.graphics.print("Last clicked cell " .. last_clicked_cell, 10, 30)
   love.graphics.translate(x_offset, y_offset)
   love.graphics.scale(scale, scale)
   for _, triangle in ipairs(triangles) do

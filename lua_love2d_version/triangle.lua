@@ -49,7 +49,7 @@ function Triangle:draw()
   love.graphics.setShader()
   love.graphics.setColor(0,0,0)
   love.graphics.polygon('line', self.vertices)
-  love.graphics.setColor(0,255,255)
+  love.graphics.setColor(255,255,255)
   love.graphics.draw(self.text,
                      self.x_centroid - (self.text:getWidth() / (10)),
                      self.y_centroid - (self.text:getHeight() / (10)),
