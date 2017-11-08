@@ -10,11 +10,10 @@ I've been getting more into lua lately so I figured I'd take a crack at it and a
 
 # Python
 For the python version I decided to use my favorite web development framework Flask. 
-I've temporarily hosted it at 107.170,255.215:5000
+I've temporarily hosted it at [jonscherwellinterview.com](http://www.jonscherwellinterview.com)
 
 # TODOs
 Unit test for flask
 Select match type based on input
 Add javascript and hit the json endpoints for progressive enhancement
-implement click selection for lua
 
